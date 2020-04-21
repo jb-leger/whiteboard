@@ -68,6 +68,7 @@ $(document).ready(function () {
         username: btoa(myUsername),
         sendFunction: function (content) {
             content["at"] = accessToken;
+            if (whiteboard.viewOnly) return;
             signaling_socket.emit('drawToWhiteboard', content);
         }
     });
