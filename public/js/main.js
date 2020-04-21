@@ -69,6 +69,7 @@ $(document).ready(function () {
         sendFunction: function (content) {
             content["at"] = accessToken;
             if (whiteboard.viewOnly) return;
+            if (content.t === 'cursor') return;
             signaling_socket.emit('drawToWhiteboard', content);
         }
     });
