@@ -63,6 +63,7 @@ $(document).ready(function () {
     if (getQueryVariable("webdav") == "true") {
         $("#uploadWebDavBtn").show();
     }
+    var messageCount = 0;
     whiteboard.loadWhiteboard("#whiteboardContainer", { //Load the whiteboard
         whiteboardId: whiteboardId,
         username: btoa(myUsername),
@@ -71,6 +72,7 @@ $(document).ready(function () {
             if (whiteboard.viewOnly) return;
             if (content.t === 'cursor') return;
             signaling_socket.emit('drawToWhiteboard', content);
+            $('#messageCount')[0].innerText = String(messageCount++);
         }
     });
 
