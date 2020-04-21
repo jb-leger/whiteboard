@@ -76,6 +76,8 @@ $(document).ready(function () {
             content["at"] = accessToken;
             if (whiteboard.viewOnly) return;
             if (content.t === 'cursor') {
+                if (whiteboard.drawFlag) return;
+
                 var newPointerSentTime = (new Date()).getTime();
                 if (newPointerSentTime - lastPointerSentTime < 50) {  // max pointer information every 50ms
                     return;
