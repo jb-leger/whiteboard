@@ -2,7 +2,7 @@ var whiteboard = {
     canvas: null,
     ctx: null,
     drawcolor: "black",
-    tool: "pen",
+    tool: "mouse",
     thickness: 4,
     prevX: null,
     prevY: null,
@@ -35,6 +35,7 @@ var whiteboard = {
         sendFunction: null,
         backgroundGridUrl: './images/KtEBa2.png'
     },
+    viewOnly: true,
     loadWhiteboard: function (whiteboardContainer, newSettings) {
         var svgns = "http://www.w3.org/2000/svg";
         var _this = this;
@@ -85,6 +86,9 @@ var whiteboard = {
 
         $(_this.mouseOverlay).on("mousedown touchstart", function (e) {
             if (_this.imgDragActive || _this.drawFlag) {
+                return;
+            }
+            if (_this.viewOnly) {
                 return;
             }
 
@@ -144,6 +148,9 @@ var whiteboard = {
             if (_this.imgDragActive || !$(e.target).hasClass("textcontainer")) {
                 return;
             }
+            if (_this.viewOnly) {
+                return;
+            }
 
             var currX = (e.offsetX || e.pageX - $(e.target).offset().left);
             var currY = (e.offsetY || e.pageY - $(e.target).offset().top);
@@ -152,11 +159,17 @@ var whiteboard = {
 
         _this.mouseOverlay.on("mousemove touchmove", function (e) {
             e.preventDefault();
+            if (_this.viewOnly) {
+                return;
+            }
             _this.triggerMouseMove(e);
         });
 
         _this.mouseOverlay.on("mouseup touchend touchcancel", function (e) {
             if (_this.imgDragActive) {
+                return;
+            }
+            if (_this.viewOnly) {
                 return;
             }
             _this.drawFlag = false;
@@ -255,10 +268,16 @@ var whiteboard = {
         });
 
         _this.mouseOverlay.on("mouseout", function (e) {
+            if (_this.viewOnly) {
+                return;
+            }
             _this.triggerMouseOut();
         });
 
         _this.mouseOverlay.on("mouseover", function (e) {
+            if (_this.viewOnly) {
+                return;
+            }
             _this.triggerMouseOver();
         });
 
@@ -765,6 +784,10 @@ var whiteboard = {
             this.backgroundGrid.append('<div style="position:absolute; left:0px; top:0px; border-right:3px dotted black; border-bottom:3px dotted black; width:' + width + 'px; height:' + height + 'px;"></div>');
             this.backgroundGrid.append('<div style="position:absolute; left:' + (width + 5) + 'px; top:0px;">smallest screen participating</div>');
         }
+    },
+    setViewOnly: function(what) {
+        var _this = this;
+	_this.viewOnly = what
     },
     handleEventsAndData: function (content, isNewData, doneCallback) {
         var _this = this;

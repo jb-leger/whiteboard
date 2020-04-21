@@ -261,6 +261,20 @@ $(document).ready(function () {
         whiteboard.redoWhiteboardClick();
     });
 
+    // view only
+    $("#whiteboardLockBtn").click(function () {
+	$("#whiteboardUnlockBtn").show()
+	$("#whiteboardLockBtn").hide()
+        whiteboard.setViewOnly(false);
+    });
+    $("#whiteboardUnlockBtn").click(function () {
+	$("#whiteboardUnlockBtn").hide()
+	$("#whiteboardLockBtn").show()
+        whiteboard.setViewOnly(true);
+    });
+    $("#whiteboardUnlockBtn").hide()
+    $("#whiteboardLockBtn").show()
+
     // switch tool
     $(".whiteboardTool").click(function () {
         $(".whiteboardTool").removeClass("active");
@@ -516,6 +530,8 @@ $(document).ready(function () {
             whiteboard.setDrawColor(elm.val());
         }
     });
+    
+    $(".whiteboardTool[tool=mouse]").click();
 });
 
 //Prevent site from changing tab on drag&drop
