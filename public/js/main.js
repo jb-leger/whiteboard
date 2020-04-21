@@ -62,6 +62,8 @@ signaling_socket.on('connect', function () {
 });
 
 $(document).ready(function () {
+    whiteboard.setViewOnly(true);
+
     if (getQueryVariable("webdav") == "true") {
         $("#uploadWebDavBtn").show();
     }
@@ -277,13 +279,9 @@ $(document).ready(function () {
 
     // view only
     $("#whiteboardLockBtn").click(function () {
-	$("#whiteboardUnlockBtn").show()
-	$("#whiteboardLockBtn").hide()
         whiteboard.setViewOnly(false);
     });
     $("#whiteboardUnlockBtn").click(function () {
-	$("#whiteboardUnlockBtn").hide()
-	$("#whiteboardLockBtn").show()
         whiteboard.setViewOnly(true);
     });
     $("#whiteboardUnlockBtn").hide()
@@ -304,6 +302,7 @@ $(document).ready(function () {
 
     // upload image button
     $("#addImgToCanvasBtn").click(function () {
+        if (whiteboard.viewOnly) return;
         showBasicAlert("Please drag the image into the browser.");
     });
 
@@ -466,12 +465,15 @@ $(document).ready(function () {
 
     // On thickness slider change
     $("#whiteboardThicknessSlider").on("input", function () {
+        if (whiteboard.viewOnly) return;
         whiteboard.setStrokeThickness($(this).val());
     });
 
     // handle drag&drop
     var dragCounter = 0;
     $('#whiteboardContainer').on("dragenter", function (e) {
+        if (whiteboard.viewOnly) return;
+
         e.preventDefault();
         e.stopPropagation();
         dragCounter++;
@@ -479,6 +481,8 @@ $(document).ready(function () {
     });
 
     $('#whiteboardContainer').on("dragleave", function (e) {
+        if (whiteboard.viewOnly) return;
+
         e.preventDefault();
         e.stopPropagation();
         dragCounter--;
@@ -488,6 +492,8 @@ $(document).ready(function () {
     });
 
     $('#whiteboardContainer').on('drop', function (e) { //Handle drop
+        if (whiteboard.viewOnly) return;
+
         if (e.originalEvent.dataTransfer) {
             if (e.originalEvent.dataTransfer.files.length) { //File from harddisc
                 e.preventDefault();

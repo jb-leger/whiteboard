@@ -787,7 +787,21 @@ var whiteboard = {
     },
     setViewOnly: function(what) {
         var _this = this;
-	_this.viewOnly = what
+	    _this.viewOnly = what;
+
+	    if (what === true){
+            $(".whiteboardTool[tool=mouse]").click(); // reset tool to prevent use of text
+            $(".whiteboardTool").prop("disabled", true);
+            $(".whiteboardEditBtn").prop("disabled", true);
+            $("#whiteboardUnlockBtn").hide();
+            $("#whiteboardLockBtn").show();
+
+        } else {
+            $(".whiteboardTool").prop("disabled", false);
+            $(".whiteboardEditBtn").prop("disabled", false);
+            $("#whiteboardUnlockBtn").show();
+            $("#whiteboardLockBtn").hide();
+        }
     },
     handleEventsAndData: function (content, isNewData, doneCallback) {
         var _this = this;
