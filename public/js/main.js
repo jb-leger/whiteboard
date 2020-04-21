@@ -68,7 +68,6 @@ $(document).ready(function () {
         $("#uploadWebDavBtn").show();
     }
     var messageSentCount = 0;
-    var lastPointerSentTime = (new Date()).getTime();
     whiteboard.loadWhiteboard("#whiteboardContainer", { //Load the whiteboard
         whiteboardId: whiteboardId,
         username: btoa(myUsername),
@@ -77,13 +76,6 @@ $(document).ready(function () {
             if (whiteboard.viewOnly) return;
             if (content.t === 'cursor') {
                 if (whiteboard.drawFlag) return;
-
-                var newPointerSentTime = (new Date()).getTime();
-                if (newPointerSentTime - lastPointerSentTime < 50) {  // max pointer information every 50ms
-                    return;
-                } else {
-                    lastPointerSentTime = newPointerSentTime;
-                }
             }
             signaling_socket.emit('drawToWhiteboard', content);
             $('#messageSentCount')[0].innerText = String(messageSentCount++);
