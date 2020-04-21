@@ -36,6 +36,9 @@ var whiteboard = {
         backgroundGridUrl: './images/KtEBa2.png'
     },
     viewOnly: true,
+    lastPointerSentTime: 0,
+    lastPointerX: 0,
+    lastPointerY: 0,
     loadWhiteboard: function (whiteboardContainer, newSettings) {
         var svgns = "http://www.w3.org/2000/svg";
         var _this = this;
@@ -385,7 +388,16 @@ var whiteboard = {
             _this.prevX = currX;
             _this.prevY = currY;
         });
-        _this.sendFunction({ "t": "cursor", "event": "move", "d": [currX, currY], "username": _this.settings.username });
+        var pointerSentTime = (new Date()).getTime();
+        if (pointerSentTime - _this.lastPointerSentTime > 100) {
+            var dist = Math.pow(_this.lastPointerX-currX,2)+Math.pow(_this.lastPointerY-currY,2);
+            if (dist>100) {
+                _this.lastPointerSentTime = pointerSentTime
+                _this.lastPointerX = currX
+                _this.lastPointerY = currY
+                _this.sendFunction({ "t": "cursor", "event": "move", "d": [currX, currY], "username": _this.settings.username });
+            }
+        }
     },
     triggerMouseOver: function () {
         var _this = this;
