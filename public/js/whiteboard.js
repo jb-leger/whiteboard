@@ -560,6 +560,9 @@ var whiteboard = {
     },
     clearWhiteboard: function () {
         var _this = this;
+        if (_this.viewOnly) {
+            return;
+        }
         _this.canvas.height = _this.canvas.height;
         _this.imgContainer.empty();
         _this.textContainer.empty();
@@ -762,10 +765,16 @@ var whiteboard = {
         });
     },
     undoWhiteboardClick: function () {
+        if (this.viewOnly) {
+            return;
+        }
         this.sendFunction({ "t": "undo" });
         this.undoWhiteboard();
     },
     redoWhiteboardClick: function () {
+        if (this.viewOnly) {
+            return;
+        }
         this.sendFunction({ "t": "redo" });
         this.redoWhiteboard();
     },
