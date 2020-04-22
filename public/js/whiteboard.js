@@ -157,7 +157,17 @@ var whiteboard = {
 
             var currX = (e.offsetX || e.pageX - $(e.target).offset().left);
             var currY = (e.offsetY || e.pageY - $(e.target).offset().top);
-            _this.sendFunction({ "t": "cursor", "event": "move", "d": [currX, currY], "username": _this.settings.username });
+
+            var pointerSentTime = (new Date()).getTime();
+            if (pointerSentTime - _this.lastPointerSentTime > 100) {
+                var dist = Math.pow(_this.lastPointerX-currX,2)+Math.pow(_this.lastPointerY-currY,2);
+                if (dist>100) {
+                    _this.lastPointerSentTime = pointerSentTime
+                    _this.lastPointerX = currX
+                    _this.lastPointerY = currY
+                    _this.sendFunction({ "t": "cursor", "event": "move", "d": [currX, currY], "username": _this.settings.username });
+                }
+            }
         })
 
         _this.mouseOverlay.on("mousemove touchmove", function (e) {
@@ -658,7 +668,16 @@ var whiteboard = {
             if ($(e.target).hasClass("removeIcon")) {
                 currX += textBox.width() - 4;
             }
-            _this.sendFunction({ "t": "cursor", "event": "move", "d": [currX, currY], "username": _this.settings.username });
+            var pointerSentTime = (new Date()).getTime();
+            if (pointerSentTime - _this.lastPointerSentTime > 100) {
+                var dist = Math.pow(_this.lastPointerX-currX,2)+Math.pow(_this.lastPointerY-currY,2);
+                if (dist>100) {
+                    _this.lastPointerSentTime = pointerSentTime
+                    _this.lastPointerX = currX
+                    _this.lastPointerY = currY
+                    _this.sendFunction({ "t": "cursor", "event": "move", "d": [currX, currY], "username": _this.settings.username });
+                }
+            }
         })
         this.textContainer.append(textBox);
         textBox.draggable({
